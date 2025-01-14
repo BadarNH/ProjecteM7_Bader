@@ -6,3 +6,4 @@ Funcionalidad
 	- Data de neixament
 	- Els usuaris es relacionaran mitjanaçant "twits"
 	- A priori text amb imatge i potser videos
+	- :/
