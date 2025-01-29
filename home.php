@@ -1,14 +1,12 @@
 <?php
 session_start();
 
-// Verificar si el usuario está logueado
 if (!isset($_SESSION['usuari'])) {
     header('Location: index.php');
     exit();
 }
 
 try {
-    // Conexión a la base de datos
     $cadena_connexio = 'mysql:dbname=redsocialdb;host=localhost:3335';
     $usuari = 'root';
     $passwd = '';
@@ -19,18 +17,15 @@ try {
         exit();
     }
 
-    // Si se envió un nuevo post
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['new_post'])) {
         $newPost = $_POST['new_post'];
 
-        // Insertar el nuevo post en la base de datos
         $stmt = $db->prepare("INSERT INTO PUBLICACIO (userID, post, datePubisehd) VALUES (:userID, :post, NOW())");
         $stmt->bindParam(':userID', $_SESSION['userID']);
         $stmt->bindParam(':post', $newPost);
         $stmt->execute();
     }
 
-    // Obtener los posts de la base de datos
     $stmt = $db->prepare("SELECT p.idPost, p.post, p.datePubisehd, u.nomUsuari FROM PUBLICACIO p
                         JOIN USUARI u ON p.userID = u.userID ORDER BY p.datePubisehd DESC");
     $stmt->execute();
@@ -62,11 +57,10 @@ try {
             </div>
         </div>
 
-        <!-- Contenido principal -->
         <div class="content">
             <h1>Benvingut, <?php echo htmlspecialchars($_SESSION['usuari']); ?>!</h1>
 
-            <!-- Formulario para crear un nuevo post -->
+
             <div class="new-post">
                 <form action="home.php" method="post">
                     <textarea name="new_post" rows="4" placeholder="Escriu el teu post..." required></textarea><br>
@@ -74,7 +68,7 @@ try {
                 </form>
             </div>
 
-            <!-- Posts -->
+
             <div class="posts">
                 <?php foreach ($posts as $post) : ?>
                     <div class="post">

@@ -1,7 +1,6 @@
 <?php
 session_start();
-require_once 'db_functions.php'; // Incluir las funciones de acceso a la base de datos
-
+require_once 'db_functions.php'; 
 if (isset($_SESSION['usuari'])) {
     header('Location: home.php');
     exit();
@@ -11,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $input = $_POST['username_or_email'];
     $password = $_POST['password'];
 
-    // Verificar si el usuario existe
+    
     $user = checkUserExists($input);
 
     if ($user) {
@@ -21,11 +20,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $active = $user['active'];
 
         if (password_verify($password, $passHash)) {
-            // Iniciar sesión
             $_SESSION['usuari'] = $nomUsuari;
             $_SESSION['userID'] = $userID;
 
-            // Actualizar el estado a activo
             activateUser($userID);
 
             header('Location: home.php');
