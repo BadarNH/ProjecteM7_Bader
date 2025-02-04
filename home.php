@@ -44,20 +44,20 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Black Arms - Home</title>
-    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="home.css">
 </head>
 <body>
     <div class="container">
         
-        <div class="menu">
-            <a href="home.php"><img src="Black_Arms_Symbol.jpg" alt="Black Arms Logo" style="max-width: 200px; height: auto;"></a>
-            <div class="menu-items">
+        <div class="menu-home">
+            <a href="home.php"><img src="Black_Arms_Symbol.jpg" alt="Black Arms Logo"></a>
+            <div class="menu-home-items">
                 <a href="home.php">Inici</a>
                 <a href="logout.php">Tancar sessió</a>
             </div>
         </div>
 
-        <div class="content">
+        <div class="content-home">
             <h1>Benvingut, <?php echo htmlspecialchars($_SESSION['usuari']); ?>!</h1>
 
 

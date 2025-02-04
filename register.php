@@ -47,48 +47,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <div class="container">
-        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
-            <div class="logo" style="margin-right: 15px;">
-                <img src="Black_Arms_Symbol.jpg" alt="Black Arms Logo" style="max-width: 80px; height: auto;">            
+        <div>
+            <div class="logo-register">
+                <img src="Black_Arms_Symbol.jpg" alt="Black Arms Logo">            
             </div>
-            <h1 style="margin: 0; font-size: 2rem;">Black Arms</h1>
+            <h1>Black Arms</h1>
         </div>
         <p>Registra't per començar!</p>
 
         <?php if (isset($error)) : ?>
-            <p style="color: red;"><?php echo htmlspecialchars($error); ?></p>
+            <p><?php echo htmlspecialchars($error);?></p>
         <?php endif; ?>
 
         <form action="register.php" method="post">
-            <div class="form-group">
+            <div class="register-user">
                 <label for="username">Nom d'usuari (Obligatori)</label><br>
                 <input type="text" id="username" name="username" placeholder="Enter your username" required>
             </div>
-            <div class="form-group">
+            <div class="register-email">
                 <label for="email">Correu electrònic (Obligatori)</label><br>
                 <input type="email" id="email" name="email" placeholder="Enter your email" required>
             </div>
-            <div class="form-group">
+            <div class="register-fname">
                 <label for="first_name">Nom (Opcional)</label><br>
                 <input type="text" id="first_name" name="first_name" placeholder="Enter your first name">
             </div>
-            <div class="form-group">
+            <div class="register-lname">
                 <label for="last_name">Cognom (Opcional)</label><br>
                 <input type="text" id="last_name" name="last_name" placeholder="Enter your last name">
             </div>
-            <div class="form-group">
+            <div class="register-password">
                 <label for="password">Contrassenya (Obligatori)</label><br>
                 <input type="password" id="password" name="password" placeholder="Enter your password" required>
             </div>
-            <div class="form-group">
+            <div class="register-vpassword">
                 <label for="verify_password">Verificar contrassenya (Obligatori)</label><br>
                 <input type="password" id="verify_password" name="verify_password" required>
             </div>
             <button type="submit">Registrar</button>
         </form>
 
-        <div style="margin-top: 1rem;">
-            <p>Ja estàs registrat? <a href="index.php" style="text-decoration: none; color: blue;">Inicia sessió!</a></p>
+        <div>
+            <p>Ja estàs registrat? <a href="index.php"">Inicia sessió!</a></p>
         </div>
     </div>
 </body>
