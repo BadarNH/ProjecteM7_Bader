@@ -18,19 +18,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $emailExists = checkUserExists($email);
 
         if ($userExists || $emailExists) {
-            $error = "El nombre de usuario o el correo electrónico ya está en uso.";
+            $error = "Nom d'usuari o email ja en ús";
         } else {
             try {
                 $registerSuccess = registerUser($username, $email, $password, $firstName, $lastName);
                 
                 if ($registerSuccess) {
-                    header('Location: index.php');
+                    header('Location: index.php');                    
+                    $randomValue = bin2hex(random_bytes(32));                    
+                    $hashedValue = hash('sha256', $randomValue);
+                    
+
                     exit();
                 } else {
-                    $error = "Hubo un problema al registrar el usuario. Inténtalo de nuevo.";
+                    $error = "Hi ha hagut un problema al registrer l'usuari. Intenta-ho un altre cop";
                 }
             } catch (PDOException $e) {
-                $error = "Error en el registro: " . $e->getMessage();
+                $error = "Error al registrer: " . $e->getMessage();
             }
         }
     }
@@ -38,12 +42,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="cat">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Black Arms - Register</title>
-    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="register.css">
 </head>
 <body>
     <div class="container">

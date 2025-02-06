@@ -23,8 +23,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['usuari'] = $nomUsuari;
             $_SESSION['userID'] = $userID;
 
-            activateUser($userID);
-
             header('Location: home.php');
             exit();
         } else {
@@ -37,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="cat">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,6 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <div>
             <p>No estas enregistrat? <a href="register.php">Uneix-te!</a></p>
+            <p><a href="recupera.php">Contrasenya olvidada?</a></p>
         </div>
 
     </div>
