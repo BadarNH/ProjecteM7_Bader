@@ -1,8 +1,9 @@
+DROP DATABASE RedSocialDB;
 CREATE DATABASE RedSocialDB;
 
 USE RedSocialDB;
 
-CREATE TABLE USER(
+CREATE TABLE USUARI(
 	userID INT PRIMARY KEY AUTO_INCREMENT,
 	nomUsuari VARCHAR(16) UNIQUE,
 	eMail VARCHAR(40) UNIQUE,
@@ -12,7 +13,11 @@ CREATE TABLE USER(
     createDate DATETIME,
     removeDate DATETIME,
     lastLogin DATETIME,
-    active TINYINT    
+    activationDate DateTime,
+	activationCode Char(64),
+	resetPassExpiry DateTime,
+	resetPassCode Char(64),
+    active TINYINT DEFAULT 1
 );
 
 CREATE TABLE PUBLICACIO(

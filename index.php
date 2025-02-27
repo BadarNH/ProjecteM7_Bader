@@ -19,14 +19,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $passHash = $user['passHash'];
         $active = $user['active'];
 
-        if (password_verify($password, $passHash)) {
+        if (password_verify($password, $passHash) && $active == 1) {
             $_SESSION['usuari'] = $nomUsuari;
             $_SESSION['userID'] = $userID;
 
             header('Location: home.php');
             exit();
         } else {
-            $error = "Contrasenya incorrecta.";
+            if($active != 1)
+            {
+                $error = "Compte pendednt de verificar";
+            }
+            else
+            {
+                $error = "Contrasenya incorrecta.";
+            }
+            
         }
     } else {
         $error = "Usuari o correu electronic incorrecte o inexistent.";

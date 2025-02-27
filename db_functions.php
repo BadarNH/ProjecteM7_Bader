@@ -28,8 +28,8 @@ function registerUser($username, $email, $password, $firstName = '', $lastName =
     $passHash = password_hash($password, PASSWORD_BCRYPT);
     $createDate = date('Y-m-d H:i:s');
 
-    $stmt = $db->prepare("INSERT INTO USUARI (nomUsuari, eMail, passHash, userNom, userCognom, createDate, active) 
-                        VALUES (:username, :email, :passHash, :firstName, :lastName, :createDate, 0)");
+    $stmt = $db->prepare("INSERT INTO USUARI (nomUsuari, eMail, passHash, userNom, userCognom, createDate) 
+                        VALUES (:username, :email, :passHash, :firstName, :lastName, :createDate)");
     $stmt->bindParam(':username', $username);
     $stmt->bindParam(':email', $email);
     $stmt->bindParam(':passHash', $passHash);
@@ -39,4 +39,11 @@ function registerUser($username, $email, $password, $firstName = '', $lastName =
     
     return $stmt->execute();
 }
+
+function saveVerificationCode($email, $code) {
+    global $pdo; // Asegúrate de tener tu conexión a la base de datos
+    $stmt = $pdo->prepare("UPDATE users SET verification_code = :code WHERE email = :email");
+    $stmt->execute(['code' => $code, 'email' => $email]);
+}
+
 ?>

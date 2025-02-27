@@ -2,6 +2,10 @@
 session_start();
 require_once 'db_config.php';
 require_once 'db_functions.php';
+require_once 'mailCheckAccount.php';
+use PHPMailer\PHPMailer\PHPMailer;
+require 'vendor/autoload.php';
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
@@ -27,7 +31,60 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     header('Location: index.php');                    
                     $randomValue = bin2hex(random_bytes(32));                    
                     $hashedValue = hash('sha256', $randomValue);
-                    
+                    $randomValue = bin2hex(random_bytes(32));
+                    $hashedValue = hash('sha256', $randomValue);
+
+                    //saveVerificationCode($email, $hashedValue);
+
+                    $domain = "http://localhost/Projecte_Fila1/ProjecteM7_Bader";
+                    $verificationLink = "$domain" . "/mailCheckAccount.php?code=$hashedValue&mail=" . $email;
+
+                    $mail = new PHPMailer(true);
+                    try {
+                        $mail->isSMTP();
+                        $mail->Host = 'smtp.gmail.com';
+                        $mail->SMTPDebug = 2;
+                        $mail->SMTPAuth = true;
+                        $mail->SMTPSecure = 'tls';
+                        
+                        $mail->Port = 587;
+                        $mail->Username = 'beder-eddine.maoulay-ahmedk@educem.net'; 
+                        $mail->Password = 'jite zxqe lngz ukdi';
+                        
+                        $mail->setFrom('beder-eddine.maoulay-ahmedk@educem.net', 'Black Arms');
+                        $mail->addAddress($email);
+
+                        $mail->isHTML(true);
+                        $mail->Subject = 'Benvingut a Black Arms - Verifica el teu compte';
+                        $mail->Body = "
+                            <html>
+                            <head>
+                                <style>
+                                    body { font-family: Arial, sans-serif; }
+                                    .container { text-align: center; }
+                                    .btn {
+                                        display: inline-block;
+                                        padding: 10px 20px;
+                                        color: #fff;
+                                        background-color: #000;
+                                        text-decoration: none;
+                                        border-radius: 5px;
+                                    }
+                                </style>
+                            </head>
+                            <body>
+                                <div class='container'>
+                                    <img src='$domain/Black_Arms_Symbol.jpg' alt='Black Arms Logo' width='100'><br>
+                                    <h2>Benvingut a Black Arms</h2>
+                                    <p>Gràcies per registrar-te! Fes clic a l'enllaç següent per activar el teu compte:</p>
+                                    <a class='btn' href='$verificationLink'>Active your account Now!</a>
+                                </div>
+                            </body>
+                            </html>";
+                        $mail->send();
+                    } catch (Exception $e) {
+                        error_log("Error al enviar el correu: " . $mail->ErrorInfo);
+                    }      
 
                     exit();
                 } else {
