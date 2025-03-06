@@ -41,9 +41,12 @@ function registerUser($username, $email, $password, $firstName = '', $lastName =
 }
 
 function saveVerificationCode($email, $code) {
-    global $pdo; // Asegúrate de tener tu conexión a la base de datos
-    $stmt = $pdo->prepare("UPDATE users SET verification_code = :code WHERE email = :email");
-    $stmt->execute(['code' => $code, 'email' => $email]);
+    global $db; 
+    $stmt = $db->prepare("UPDATE USUARI SET activationCode = :code WHERE eMail = :email");
+    $stmt->bindParam(':code', $code);
+    $stmt->bindParam(':email', $email);
+    $stmt->execute();
+    //$stmt->execute([':code' => $code, ':email' => $email]);
 }
 
 ?>

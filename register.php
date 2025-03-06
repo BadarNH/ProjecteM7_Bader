@@ -32,12 +32,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $randomValue = bin2hex(random_bytes(32));                    
                     $hashedValue = hash('sha256', $randomValue);
                     $randomValue = bin2hex(random_bytes(32));
-                    $hashedValue = hash('sha256', $randomValue);
-
-                    //saveVerificationCode($email, $hashedValue);
+                    $hashedValue = hash('sha256', $randomValue);                    
 
                     $domain = "http://localhost/Projecte_Fila1/ProjecteM7_Bader";
-                    $verificationLink = "$domain" . "/mailCheckAccount.php?code=$hashedValue&mail=" . $email;
+                    $verificationLink = "$domain" . "/mailCheckAccount.php?code=" . $hashedValue . "&mail=" . $email;
 
                     $mail = new PHPMailer(true);
                     try {
@@ -49,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         
                         $mail->Port = 587;
                         $mail->Username = 'beder-eddine.maoulay-ahmedk@educem.net'; 
-                        $mail->Password = 'jite zxqe lngz ukdi';
+                        $mail->Password = 'amtb pbbe ngkf wlhk';
                         
                         $mail->setFrom('beder-eddine.maoulay-ahmedk@educem.net', 'Black Arms');
                         $mail->addAddress($email);
@@ -74,14 +72,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </head>
                             <body>
                                 <div class='container'>
-                                    <img src='$domain/Black_Arms_Symbol.jpg' alt='Black Arms Logo' width='100'><br>
+                                    <img src='https://drive.google.com/uc?id=11hOTVTcWHSYXyWyne7cAwniMmpWbHJin' alt='Black Arms Logo' width='100'><br>
                                     <h2>Benvingut a Black Arms</h2>
                                     <p>Gràcies per registrar-te! Fes clic a l'enllaç següent per activar el teu compte:</p>
                                     <a class='btn' href='$verificationLink'>Active your account Now!</a>
                                 </div>
                             </body>
-                            </html>";
+                            </html>"; 
+                            
                         $mail->send();
+                        saveVerificationCode($email, $hashedValue);
                     } catch (Exception $e) {
                         error_log("Error al enviar el correu: " . $mail->ErrorInfo);
                     }      
@@ -95,7 +95,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
     }
+    
 }
+
 ?>
 
 <!DOCTYPE html>

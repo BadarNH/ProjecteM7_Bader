@@ -17,7 +17,7 @@ CREATE TABLE USUARI(
 	activationCode Char(64),
 	resetPassExpiry DateTime,
 	resetPassCode Char(64),
-    active TINYINT DEFAULT 1
+    active TINYINT DEFAULT 0
 );
 
 CREATE TABLE PUBLICACIO(
