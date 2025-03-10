@@ -49,6 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Black Arms - Login</title>
     <link rel="stylesheet" href="index.css">
+    <script src="index.js" defer></script>
 </head>
 <body>
     <div class="container-login">
@@ -75,12 +76,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <button type="submit" class="login-btn">Log In</button>
         </form>
-
         <div>
             <p>No estas enregistrat? <a href="register.php">Uneix-te!</a></p>
-            <p><a href="recupera.php">Contrasenya olvidada?</a></p>
-        </div>
+            <p><a href="#">Contrasenya olvidada?</a></p>
+        </div>            
 
+        <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Recupera la teva contrassenya</h2>
+            <input type="email" id="emailRecovery" placeholder="Introdueix el teu correu" required>
+            <button id="submitRecovery">Enviar</button>
+        </div>
+            
+    </div>
     </div>
 </body>
 </html>
