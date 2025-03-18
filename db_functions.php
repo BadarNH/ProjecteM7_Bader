@@ -49,4 +49,12 @@ function saveVerificationCode($email, $code) {
     //$stmt->execute([':code' => $code, ':email' => $email]);
 }
 
+function getEmailByUser($user)
+{
+    global $db;
+    $stmt = $db->prepare("SELECT eMail FROM USUARI WHERE nomUsuari = :user");
+    $stmt->bindParam(':user', $user);
+    return $stmt->execute();
+}
+
 ?>

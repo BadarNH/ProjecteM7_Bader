@@ -1,23 +1,16 @@
-var modal = document.getElementById("myModal");
-var link = document.getElementById("forgotPasswordLink");
-var span = document.getElementsByClassName("close")[0];
+var exampleModal = document.getElementById('exampleModal')
+exampleModal.addEventListener('show.bs.modal', function (event) {
+  // Button that triggered the modal
+  var button = event.relatedTarget
+  // Extract info from data-bs-* attributes
+  var recipient = button.getAttribute('data-bs-whatever')
+  // If necessary, you could initiate an AJAX request here
+  // and then do the updating in a callback.
+  //
+  // Update the modal's content.
+  var modalTitle = exampleModal.querySelector('.modal-title')
+  var modalBodyInput = exampleModal.querySelector('.modal-body input')
 
-link.onclick = function() {
-    modal.style.display = "flex"; // Cambiar a flex para centrar
-}
-
-span.onclick = function() {
-    modal.style.display = "none";
-}
-
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-}
-
-document.getElementById("submitRecovery").onclick = function() {
-    var email = document.getElementById("emailRecovery").value;
-    alert("Email de recuperació enviat a: " + email);
-    modal.style.display = "none";
-}
+  modalTitle.textContent = 'New message to ' + recipient
+  modalBodyInput.value = recipient
+})
