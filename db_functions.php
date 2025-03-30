@@ -49,12 +49,25 @@ function saveVerificationCode($email, $code) {
     //$stmt->execute([':code' => $code, ':email' => $email]);
 }
 
+function saveReset($email, $code, $expiry) {
+    global $db; 
+    $stmt = $db->prepare("UPDATE USUARI SET resetPassCode = :code, resetPassExpiry = :expiry WHERE eMail = :email");
+    $stmt->bindParam(':code', $code);
+    $stmt->bindParam(':email', $email);
+    $stmt->bindParam(':expiry', $expiry);
+    $stmt->execute();
+    //$stmt->execute([':code' => $code, ':email' => $email]);
+}
+
 function getEmailByUser($user)
 {
     global $db;
     $stmt = $db->prepare("SELECT eMail FROM USUARI WHERE nomUsuari = :user");
     $stmt->bindParam(':user', $user);
-    return $stmt->execute();
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    return $result ? $result['eMail'] : null; 
 }
 
 ?>

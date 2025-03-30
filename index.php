@@ -1,14 +1,19 @@
 <?php
 session_start();
 require_once 'db_functions.php'; 
+use PHPMailer\PHPMailer\PHPMailer;
+require 'vendor/autoload.php';
+
 if (isset($_SESSION['usuari'])) {
     header('Location: home.php');
     exit();
 }
 
+$error = '';
+$success = '';
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['username_or_email'])) {
-        // Login
         $input = $_POST['username_or_email'];
         $password = $_POST['password'];
 
@@ -33,47 +38,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $error = "Usuari o correu electrònic incorrecte o inexistent.";
         }
     } 
-    else if(isset($_POST['restoreInput']))
-    {
+    else if (isset($_POST['restoreInput'])) {
         $input = $_POST['restoreInput'];
-        $user = checkUserExists($input);
-        if($user)
-        {
-            if (!$user) {
+        $usuariExists = checkUserExists($input);
+    
+        if ($usuariExists) {
+            if (!$usuariExists) {
                 $error = "Compte inexistent";
-            } 
-            else{
-                if(!str_contains($user, '@'))
-                {
-                    $user = getEmailByUser($user);
+            } else {
+                if (filter_var($input, FILTER_VALIDATE_EMAIL)) {
+                    $email = $input;
+                } else {
+                    $email = getEmailByUser($input);
                 }
-
-                header('Location: index.php');                    
-                $randomValue = bin2hex(random_bytes(32));                    
-                $hashedValue = hash('sha256', $randomValue);
+    
                 $randomValue = bin2hex(random_bytes(32));
-                $hashedValue = hash('sha256', $randomValue);                    
-
+                $hashedValue = hash('sha256', $randomValue);
+                $expiry = date("Y-m-d H:i:s", strtotime("+30 minutes"));
+    
                 $domain = "http://localhost/Projecte_Fila1/ProjecteM7_Bader";
-                $verificationLink = "$domain" . "/mailCheckAccount.php?code=" . $hashedValue . "&mail=" . $email;
-
+                $resetLink = "$domain/resetPassword.php?code=$hashedValue&mail=$email";
+    
                 $mail = new PHPMailer(true);
                 try {
                     $mail->isSMTP();
                     $mail->Host = 'smtp.gmail.com';
-                    $mail->SMTPDebug = 2;
                     $mail->SMTPAuth = true;
                     $mail->SMTPSecure = 'tls';
-                    
                     $mail->Port = 587;
-                    $mail->Username = 'beder-eddine.maoulay-ahmedk@educem.net'; 
+                    $mail->Username = 'beder-eddine.maoulay-ahmedk@educem.net';
                     $mail->Password = 'amtb pbbe ngkf wlhk';
-                    
+    
                     $mail->setFrom('beder-eddine.maoulay-ahmedk@educem.net', 'Black Arms');
                     $mail->addAddress($email);
-
+    
                     $mail->isHTML(true);
-                    $mail->Subject = 'Recuperació de contrasenya';
+                    $mail->Subject = 'Recuperacio de contrasenya';
                     $mail->Body = "
                         <html>
                         <head>
@@ -84,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     display: inline-block;
                                     padding: 10px 20px;
                                     color: #fff;
-                                    background-color: #000;
+                                    background-color: #000; 
                                     text-decoration: none;
                                     border-radius: 5px;
                                 }
@@ -93,23 +93,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <body>
                             <div class='container'>
                                 <img src='https://drive.google.com/uc?id=11hOTVTcWHSYXyWyne7cAwniMmpWbHJin' alt='Black Arms Logo' width='100'><br>
-                                <h2>Benvingut a Black Arms</h2>
-                                <p>Gràcies per registrar-te! Fes clic a l'enllaç següent per activar el teu compte:</p>
-                                <a class='btn' href='$verificationLink'>Active your account Now!</a>
+                                <h2>Solicitud de recuperació de contrasenya</h2>
+                                <p>Enllaç valid fins al $expiry</p>
+                                <a class='btn' href='$resetLink'>I want to Reset My Password!</a>
                             </div>
                         </body>
-                        </html>"; 
-                        
+                        </html>";
+    
                     $mail->send();
-                    saveVerificationCode($email, $hashedValue);
+                    saveReset($email, $hashedValue, $expiry);
+    
+                    $success = "S'ha enviat un correu amb les instruccions per restablir la contrasenya.";
                 } catch (Exception $e) {
-                    error_log("Error al enviar el correu: " . $mail->ErrorInfo);
-                }      
-
-                exit();
+                    $error = "Error al enviar el correu: " . $mail->ErrorInfo;
+                }
             }
+        } else {
+            $error = "Compte inexistent";
         }
-
     }
 }
 ?>
@@ -135,8 +136,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         <p>Benvingut! Inicia sessió!</p>
 
-        <?php if (isset($error)) : ?>
-            <p><?php echo $error; ?></p>
+        <?php if (!empty($error)): ?>
+            <div class="alert alert-danger"><?php echo $error; ?></div>
+        <?php endif; ?>
+
+        <?php if (!empty($success)): ?>
+            <div class="alert alert-success"><?php echo $success; ?></div>
         <?php endif; ?>
 
         <form action="index.php" method="post">
@@ -152,17 +157,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
         <div>
             <p>No estas enregistrat? <a href="register.php">Uneix-te!</a></p>
-            <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">Contrasenya olvidada?</a>            
+            <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">Contrasenya olvidada?</a>            
             <!-- Modal -->
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Recuperar Contrasenya</h5>
+                        <h5 id="exampleModalLabel">Recuperar Contrasenya</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form method="POST" action="">
+                        <form method="POST" action="index.php">
                             <div class="mb-3">
                                 <label for="restoreInput" class="col-form-label">Correu o usuari:</label>
                                 <input type="text" class="form-control" id="restoreInput" name="restoreInput" required>

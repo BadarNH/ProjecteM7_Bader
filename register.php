@@ -6,7 +6,6 @@ require_once 'mailCheckAccount.php';
 use PHPMailer\PHPMailer\PHPMailer;
 require 'vendor/autoload.php';
 
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $email = $_POST['email'];
@@ -17,6 +16,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($password !== $verifyPassword) {
         $error = "Las contraseñas no coinciden.";
+    } elseif (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/", $password)) {
+        $error = "La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un carácter especial.";
     } else {
         $userExists = checkUserExists($username);
         $emailExists = checkUserExists($email);
@@ -26,13 +27,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             try {
                 $registerSuccess = registerUser($username, $email, $password, $firstName, $lastName);
-                
+
                 if ($registerSuccess) {
-                    header('Location: index.php');                    
-                    $randomValue = bin2hex(random_bytes(32));                    
+                    header('Location: index.php');
+                    $randomValue = bin2hex(random_bytes(32));
                     $hashedValue = hash('sha256', $randomValue);
                     $randomValue = bin2hex(random_bytes(32));
-                    $hashedValue = hash('sha256', $randomValue);                    
+                    $hashedValue = hash('sha256', $randomValue);
 
                     $domain = "http://localhost/Projecte_Fila1/ProjecteM7_Bader";
                     $verificationLink = "$domain" . "/mailCheckAccount.php?code=" . $hashedValue . "&mail=" . $email;
@@ -44,11 +45,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $mail->SMTPDebug = 2;
                         $mail->SMTPAuth = true;
                         $mail->SMTPSecure = 'tls';
-                        
+
                         $mail->Port = 587;
-                        $mail->Username = 'beder-eddine.maoulay-ahmedk@educem.net'; 
+                        $mail->Username = 'beder-eddine.maoulay-ahmedk@educem.net';
                         $mail->Password = 'amtb pbbe ngkf wlhk';
-                        
+
                         $mail->setFrom('beder-eddine.maoulay-ahmedk@educem.net', 'Black Arms');
                         $mail->addAddress($email);
 
@@ -78,13 +79,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <a class='btn' href='$verificationLink'>Active your account Now!</a>
                                 </div>
                             </body>
-                            </html>"; 
-                            
+                            </html>";
+
                         $mail->send();
                         saveVerificationCode($email, $hashedValue);
                     } catch (Exception $e) {
                         error_log("Error al enviar el correu: " . $mail->ErrorInfo);
-                    }      
+                    }
 
                     exit();
                 } else {
@@ -95,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
     }
-    
+
 }
 
 ?>
@@ -106,6 +107,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Black Arms - Register</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="register.css">
 </head>
 <body>
@@ -118,9 +120,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         <p>Registra't per començar!</p>
 
-        <?php if (isset($error)) : ?>
-            <p><?php echo htmlspecialchars($error);?></p>
+        <?php if (!empty($error)): ?>
+            <div class="alert alert-danger"><?php echo $error; ?></div>
         <?php endif; ?>
+
 
         <form action="register.php" method="post">
             <div class="register-user">
@@ -132,12 +135,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input type="email" id="email" name="email" placeholder="Enter your email" required>
             </div>
             <div class="register-fname">
-                <label for="first_name">Nom (Opcional)</label><br>
-                <input type="text" id="first_name" name="first_name" placeholder="Enter your first name">
+                <label for="first_name">Nom (Obligatori)</label><br>
+                <input type="text" id="first_name" name="first_name" placeholder="Enter your first name" required>
             </div>
             <div class="register-lname">
-                <label for="last_name">Cognom (Opcional)</label><br>
-                <input type="text" id="last_name" name="last_name" placeholder="Enter your last name">
+                <label for="last_name">Cognom (Obligatori)</label><br>
+                <input type="text" id="last_name" name="last_name" placeholder="Enter your last name" required>
             </div>
             <div class="register-password">
                 <label for="password">Contrassenya (Obligatori)</label><br>
@@ -151,7 +154,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
 
         <div>
-            <p>Ja estàs registrat? <a href="index.php"">Inicia sessió!</a></p>
+            <p>Ja estàs registrat? <a href="index.php">Inicia sessió!</a></p>
         </div>
     </div>
 </body>
