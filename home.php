@@ -68,16 +68,27 @@ try {
                 </form>
             </div>
 
-
             <div class="posts">
                 <?php foreach ($posts as $post) : ?>
                     <div class="post">
-                        <p><strong><?php echo htmlspecialchars($post['nomUsuari']); ?></strong> <span><?php echo date('d-m-Y H:i', strtotime($post['datePubisehd'])); ?></span></p>
+                        <p><strong>
+                            <!-- Si es tu perfil, redirige a logedProfile.php, si es otro, redirige a userProfile.php con nomUsuari -->
+                            <a href="<?php echo ($_SESSION['usuari'] == $post['nomUsuari']) ? 'logedProfile.php' : 'userProfile.php?nomUsuari=' . urlencode($post['nomUsuari']); ?>">
+                                <?php echo htmlspecialchars($post['nomUsuari']); ?>
+                            </a>
+                        </strong> 
+                        <span><?php echo date('d-m-Y H:i', strtotime($post['datePubisehd'])); ?></span></p>
                         <p><?php echo nl2br(htmlspecialchars($post['post'])); ?></p>
                     </div>
                 <?php endforeach; ?>
             </div>
+
         </div>
     </div>
 </body>
+<style>
+    body {        
+        background-color: #d1d1d1;
+    }
+</style>
 </html>

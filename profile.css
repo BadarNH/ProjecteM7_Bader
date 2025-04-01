@@ -2,7 +2,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    background-color: #d1d1d1;
 }
 
 .menu-home {
@@ -172,7 +172,6 @@ body {
 .btn-edit-profile:hover {
     background-color: #444;
 }
-
 
 /* Responsividad */
 @media screen and (max-width: 768px) {
