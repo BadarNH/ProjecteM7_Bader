@@ -17,6 +17,10 @@ CREATE TABLE USUARI(
 	activationCode Char(64),
 	resetPassExpiry DateTime,
 	resetPassCode Char(64),
+    profilePic VARCHAR(255),   
+    bio TEXT,             
+    ubication VARCHAR(255),       
+    birth DATE, 
     active TINYINT DEFAULT 0
 );
 

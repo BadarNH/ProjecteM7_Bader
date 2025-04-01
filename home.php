@@ -51,20 +51,19 @@ try {
     <div class="container">
         
         <div class="menu-home">
-            <a href="home.php"><img src="Black_Arms_Symbol.jpg" alt="Black Arms Logo"></a>
-            <div class="menu-home-items">
+            <a href="home.php"><img src="Black_Arms_Symbol.jpg" alt="Black Arms Logo"></a>            
+            <div class="menu-home-items">                
+            <a href="logedProfile.php" class="selfProfile"><?php echo htmlspecialchars($_SESSION['usuari']); ?></a> 
                 <a href="home.php">Inici</a>
-                <a href="logout.php">Tancar sessió</a>
+                <a href="logout.php">Tancar sessió</a>         
             </div>
         </div>
 
         <div class="content-home">
             <h1>Benvingut, <?php echo htmlspecialchars($_SESSION['usuari']); ?>!</h1>
-
-
             <div class="new-post">
                 <form action="home.php" method="post">
-                    <textarea name="new_post" rows="4" placeholder="Escriu el teu post..." required></textarea><br>
+                    <textarea name="new_post" rows="4" placeholder="En que estas pensant?" required></textarea><br>
                     <button type="submit">Publicar</button>
                 </form>
             </div>
