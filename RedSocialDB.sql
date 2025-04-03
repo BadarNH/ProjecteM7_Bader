@@ -1,4 +1,4 @@
-DROP DATABASE RedSocialDB;
+
 CREATE DATABASE RedSocialDB;
 
 USE RedSocialDB;
@@ -31,3 +31,4 @@ CREATE TABLE PUBLICACIO(
     datePubisehd DATETIME,
     image VARCHAR(4000)    
 );
+

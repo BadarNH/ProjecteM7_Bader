@@ -54,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
                 $randomValue = bin2hex(random_bytes(32));
                 $hashedValue = hash('sha256', $randomValue);
-                $expiry = date("Y-m-d H:i:s", strtotime("+30 minutes"));
+                $expiry = date("Y-m-d H:i:s"/*, strtotime("+30 minutes")*/);
     
                 $domain = "http://localhost/Projecte_Fila1/ProjecteM7_Bader";
                 $resetLink = "$domain/resetPassword.php?code=$hashedValue&mail=$email";

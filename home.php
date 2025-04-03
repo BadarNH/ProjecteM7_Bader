@@ -36,7 +36,6 @@ try {
     exit();
 }
 
-
 ?>
 
 <!DOCTYPE html>
@@ -48,33 +47,29 @@ try {
     <link rel="stylesheet" href="home.css">
 </head>
 <body>
-    <div class="container">
-        
+
+    <div class="container">        
         <div class="menu-home">
             <a href="home.php"><img src="Black_Arms_Symbol.jpg" alt="Black Arms Logo"></a>            
             <div class="menu-home-items">                
             <a href="logedProfile.php" class="selfProfile"><?php echo htmlspecialchars($_SESSION['usuari']); ?></a> 
-                <a href="home.php">Inici</a>
-                <a href="logout.php">Tancar sessió</a>         
+                <a href="logout.php">Tancar sessió</a>
             </div>
         </div>
-
         <div class="content-home">
             <h1>Benvingut, <?php echo htmlspecialchars($_SESSION['usuari']); ?>!</h1>
             <div class="new-post">
                 <form action="home.php" method="post">
-                    <textarea name="new_post" rows="4" placeholder="En que estas pensant?" required></textarea><br>
+                    <textarea name="new_post" rows="4" placeholder="Opina, i observa el món cremar!" required></textarea><br>
                     <button type="submit">Publicar</button>
                 </form>
             </div>
-
             <div class="posts">
                 <?php foreach ($posts as $post) : ?>
                     <div class="post">
                         <p><strong>
-                            <!-- Si es tu perfil, redirige a logedProfile.php, si es otro, redirige a userProfile.php con nomUsuari -->
                             <a href="<?php echo ($_SESSION['usuari'] == $post['nomUsuari']) ? 'logedProfile.php' : 'userProfile.php?nomUsuari=' . urlencode($post['nomUsuari']); ?>">
-                                <?php echo htmlspecialchars($post['nomUsuari']); ?>
+                                <?php echo htmlspecialchars($post['nomUsuari']);?>
                             </a>
                         </strong> 
                         <span><?php echo date('d-m-Y H:i', strtotime($post['datePubisehd'])); ?></span></p>
@@ -82,13 +77,17 @@ try {
                     </div>
                 <?php endforeach; ?>
             </div>
-
         </div>
     </div>
 </body>
 <style>
     body {        
         background-color: #d1d1d1;
+    }
+    .post a
+    {
+        text-decoration: none;
+        color: black;
     }
 </style>
 </html>

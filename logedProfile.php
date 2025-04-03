@@ -38,7 +38,6 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="menu-home">
             <a href="home.php"><img src="Black_Arms_Symbol.jpg" alt="Black Arms Logo"></a>
             <div class="menu-home-items">
-                <a href="logedPerfil.php" class="selfProfile"><?php echo htmlspecialchars($_SESSION['usuari']); ?></a>
                 <a href="home.php">Inici</a>
                 <a href="logout.php">Tancar sessió</a>
             </div>

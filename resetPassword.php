@@ -12,6 +12,7 @@ if (!isset($_GET['code']) || !isset($_GET['mail'])) {
 $code = $_GET['code'];
 $email = $_GET['mail'];
 
+// Buscar si el código de restablecimiento existe y si no ha expirado
 $stmt = $db->prepare("SELECT resetPassExpiry FROM USUARI WHERE eMail = :email AND resetPassCode = :code");
 $stmt->execute([':email' => $email, ':code' => $code]);
 $user = $stmt->fetch();
@@ -68,17 +69,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$error) {
                         <?php if ($success): ?>
                             <div class="alert alert-success"><?= $success ?></div>
                         <?php else: ?>
-                            <form method="POST">
-                                <div class="mb-3">
-                                    <label for="password" class="form-label">Nova Contrasenya</label>
-                                    <input type="password" class="form-control <?= $error ? 'is-invalid' : '' ?>" id="password" name="password" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="confirmPassword" class="form-label">Confirma la Contrasenya</label>
-                                    <input type="password" class="form-control <?= $error ? 'is-invalid' : '' ?>" id="confirmPassword" name="confirmPassword" required>
-                                </div>
-                                <button type="submit" class="btn btn-primary w-100">Canviar Contrasenya</button>
-                            </form>
+                            <!-- Solo mostrar el formulario si el código no ha expirado -->
+                            <?php if (strtotime($user['resetPassExpiry']) >= time()): ?>
+                                <form method="POST">
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label">Nova Contrasenya</label>
+                                        <input type="password" class="form-control <?= $error ? 'is-invalid' : '' ?>" id="password" name="password" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="confirmPassword" class="form-label">Confirma la Contrasenya</label>
+                                        <input type="password" class="form-control <?= $error ? 'is-invalid' : '' ?>" id="confirmPassword" name="confirmPassword" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100">Canviar Contrasenya</button>
+                                </form>
+                            <?php else: ?>
+                                <div class="alert alert-danger">El codi de restabliment ha expirat. Si ho desitges, sol·licita un nou codi.</div>
+                            <?php endif; ?>
                         <?php endif; ?>
                     </div>
                 </div>
