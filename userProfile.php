@@ -10,7 +10,6 @@ if (!isset($_GET['nomUsuari'])) {
 
 $nomUsuari = $_GET['nomUsuari'];
 
-// Obtener los datos del usuario por nomUsuari
 $stmt = $db->prepare("SELECT userID, profilePic, bio, ubication, birth, nomUsuari FROM USUARI WHERE nomUsuari = :nomUsuari");
 $stmt->bindParam(':nomUsuari', $nomUsuari);
 $stmt->execute();
@@ -21,9 +20,8 @@ if (!$userData) {
     exit();
 }
 
-$userID = $userData['userID'];  // Ahora tenemos el userID
+$userID = $userData['userID'];  
 
-// Obtener las publicaciones del usuario por userID
 $stmt = $db->prepare("SELECT post, datePubisehd FROM PUBLICACIO WHERE userID = :userID ORDER BY datePubisehd DESC");
 $stmt->bindParam(':userID', $userID);
 $stmt->execute();
@@ -42,7 +40,6 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="menu-home">
             <a href="home.php"><img src="Black_Arms_Symbol.jpg" alt="Black Arms Logo"></a>
             <div class="menu-home-items">
-                <!-- Aquí se muestra el perfil de la sesión, redirige a logedProfile.php -->
                 <a href="logedProfile.php" class="selfProfile"><?php echo htmlspecialchars($_SESSION['usuari']); ?></a>
                 <a href="home.php">Inici</a>
                 <a href="logout.php">Tancar sessió</a>

@@ -12,7 +12,6 @@ if (!isset($_GET['code']) || !isset($_GET['mail'])) {
 $code = $_GET['code'];
 $email = $_GET['mail'];
 
-// Buscar si el código de restablecimiento existe y si no ha expirado
 $stmt = $db->prepare("SELECT resetPassExpiry FROM USUARI WHERE eMail = :email AND resetPassCode = :code");
 $stmt->execute([':email' => $email, ':code' => $code]);
 $user = $stmt->fetch();
